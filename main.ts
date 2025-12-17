@@ -1,19 +1,89 @@
 radio.onReceivedNumber(function (receivedNumber) {
-	
-})
-let Ausgewält = 0
-radio.setGroup(1)
-let Leben = 4
-basic.forever(function () {
-    if (input.buttonIsPressed(Button.A)) {
-        if (1 < Ausgewält) {
-            Ausgewält += -1
+    if (!(Schutz == 1)) {
+        if (receivedNumber == 8) {
+            Leben += -1
+        }
+        if (receivedNumber == 9) {
+            Leben += -3
+        }
+        if (receivedNumber == 10) {
+            Leben += -5
         }
     }
+})
+// Variable Items:
+// 0=nichts
+// 1=Kompas
+// 2=Starkes Schwert
+function Items () {
+	
+}
+function Colldown () {
+    basic.showLeds(`
+        # # # # #
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        `)
+    basic.pause(100)
+    basic.showLeds(`
+        . . . . .
+        # # # # #
+        . . . . .
+        . . . . .
+        . . . . .
+        `)
+    basic.pause(100)
+    basic.showLeds(`
+        . . . . .
+        . . . . .
+        # # # # #
+        . . . . .
+        . . . . .
+        `)
+    basic.pause(100)
+    basic.showLeds(`
+        . . . . .
+        . . . . .
+        . . . . .
+        # # # # #
+        . . . . .
+        `)
+    basic.pause(100)
+    basic.showLeds(`
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        # # # # #
+        `)
+    basic.pause(100)
+    basic.clearScreen()
+}
+let Ausgewält = 0
+let Schutz = 0
+radio.setGroup(1)
+let Leben = 4
+let Coins = 10
+basic.forever(function () {
+    if (input.buttonIsPressed(Button.A)) {
+        Ausgewält += -1
+    }
     if (input.buttonIsPressed(Button.B)) {
-        if (Ausgewält < 0) {
-            Ausgewält += 1
-        }
+        Ausgewält += 1
+    }
+    if (1 > Ausgewält) {
+        Ausgewält = 1
+    }
+    // Immer erhöhen wenn es ein slot mehr gibt
+    if (7 < Ausgewält) {
+        Ausgewält = 7
+    }
+})
+basic.forever(function () {
+    if (!(input.pinIsPressed(TouchPin.P0))) {
+        Schutz = 0
     }
 })
 basic.forever(function () {
@@ -28,13 +98,7 @@ basic.forever(function () {
                 `)
         }
         if (Leben == 24) {
-            basic.showLeds(`
-                # # # # #
-                # # # # #
-                # # # # #
-                # # # # #
-                # # # # .
-                `)
+        	
         }
         if (Leben == 23) {
             basic.showLeds(`
@@ -245,9 +309,77 @@ basic.forever(function () {
         }
     }
     if (Leben == 0) {
+        music.playMelody("F F E E D D C C ", 170)
         while (!(input.buttonIsPressed(Button.A))) {
             basic.showIcon(IconNames.Skull)
             music.playMelody("F F E E D D C C ", 170)
         }
+    }
+})
+basic.forever(function () {
+    if (Ausgewält == 2) {
+        let Items1 = 0
+        if (Items1 == 0) {
+            basic.clearScreen()
+        }
+        if (Items1 == 1) {
+            basic.showCompass(500)
+        }
+        if (Items1 == 2) {
+            radio.setTransmitPower(3)
+            basic.showLeds(`
+                . . . # #
+                . . # # #
+                # # # # .
+                . # # . .
+                # . # . .
+                `)
+            if (input.pinIsPressed(TouchPin.P0)) {
+                Schutz = 1
+            } else {
+                if (input.isGesture(Gesture.Shake)) {
+                    radio.sendNumber(12)
+                    Colldown()
+                }
+            }
+        }
+    }
+})
+basic.forever(function () {
+    if (Ausgewält == 3) {
+    	
+    }
+})
+basic.forever(function () {
+    if (Ausgewält == 4) {
+    	
+    }
+})
+basic.forever(function () {
+    if (Ausgewält == 5) {
+    	
+    }
+})
+basic.forever(function () {
+    if (Ausgewält == 6) {
+    	
+    }
+})
+basic.forever(function () {
+    if (true) {
+    	
+    }
+})
+basic.forever(function () {
+    if (Leben == 1) {
+        basic.setLedColor(0xff0000)
+        basic.pause(500)
+        basic.setLedColor(0x000000)
+        basic.pause(500)
+    }
+})
+basic.forever(function () {
+    if (Ausgewält == 7) {
+        basic.showNumber(Coins)
     }
 })
