@@ -10,6 +10,9 @@ radio.onReceivedNumber(function (receivedNumber) {
             Leben += -5
         }
     }
+    if (receivedNumber == 1) {
+        Musik = 1
+    }
 })
 // Variable Items:
 // 0=nichts
@@ -69,9 +72,11 @@ let Pfeile = 0
 let Vielleicht = 0
 let Ausgewält = 0
 let Schutz = 0
+let Musik = 0
 radio.setGroup(1)
 let Leben = 4
 let Coins = 10
+Musik = 0
 basic.forever(function () {
     if (input.buttonIsPressed(Button.A)) {
         Ausgewält += -1
@@ -343,7 +348,12 @@ basic.forever(function () {
     }
 })
 basic.forever(function () {
-    if (true) {
+    // Hintergrund Musik
+    if (Musik == 0) {
+    	
+    }
+    // Boss Musik
+    if (Musik == 1) {
     	
     }
 })
@@ -443,6 +453,7 @@ basic.forever(function () {
                 `)
             if (input.pinIsPressed(TouchPin.P0)) {
                 radio.sendNumber(12)
+                music.play(music.tonePlayable(294, music.beat(BeatFraction.Sixteenth)), music.PlaybackMode.InBackground)
                 basic.showLeds(`
                     . . . . .
                     . . . # .
