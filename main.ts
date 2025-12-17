@@ -15,6 +15,10 @@ radio.onReceivedNumber(function (receivedNumber) {
 // 0=nichts
 // 1=Kompas
 // 2=Starkes Schwert
+// 3=Schwaches Schwert
+// 4=Bogen
+// 5=Pfeile
+// 6=Blaster
 function Items () {
 	
 }
@@ -334,6 +338,16 @@ basic.forever(function () {
     }
 })
 basic.forever(function () {
+    if (Ausgewält == 6) {
+    	
+    }
+})
+basic.forever(function () {
+    if (true) {
+    	
+    }
+})
+basic.forever(function () {
     if (Ausgewält == 2) {
         let Items1 = 0
         if (Items1 == 0) {
@@ -407,21 +421,47 @@ basic.forever(function () {
                 }
             }
         }
+        if (Items1 == 5) {
+            basic.showLeds(`
+                . . # . .
+                . # . . #
+                # # # # #
+                . # . . #
+                . . # . .
+                `)
+            basic.pause(2000)
+            basic.showNumber(Pfeile)
+        }
+        if (Items1 == 6) {
+            radio.setTransmitPower(7)
+            basic.showLeds(`
+                . . . . .
+                . . # . .
+                # # # # .
+                . . # # .
+                . . . # .
+                `)
+            if (input.pinIsPressed(TouchPin.P0)) {
+                radio.sendNumber(12)
+                basic.showLeds(`
+                    . . . . .
+                    . . . # .
+                    . # # # #
+                    . . . # #
+                    . . . . #
+                    `)
+                basic.pause(100)
+                basic.showLeds(`
+                    . . . . .
+                    . . # . .
+                    # # # # .
+                    . . # # .
+                    . . . # .
+                    `)
+                basic.pause(200)
+            }
+        }
     }
-})
-basic.forever(function () {
-    if (Ausgewält == 6) {
-    	
-    }
-})
-basic.forever(function () {
-    if (true) {
-    	
-    }
-})
-basic.forever(function () {
-    basic.pause(1000)
-    Vielleicht = randint(0, 1)
 })
 basic.forever(function () {
     if (Leben == 1) {
@@ -435,4 +475,8 @@ basic.forever(function () {
     if (Ausgewält == 7) {
         basic.showNumber(Coins)
     }
+})
+basic.forever(function () {
+    basic.pause(1000)
+    Vielleicht = randint(0, 1)
 })
