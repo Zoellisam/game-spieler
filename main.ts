@@ -15,6 +15,7 @@ radio.onReceivedNumber(function (receivedNumber) {
 // 0=nichts
 // 1=Kompas
 // 2=Starkes Schwert
+// 3=schwaches Schwert
 function Items () {
 	
 }
@@ -61,6 +62,9 @@ function Colldown () {
     basic.pause(100)
     basic.clearScreen()
 }
+let Pfeile = 0
+let Vielleicht = 0
+let Warte = 0
 let Ausgewält = 0
 let Schutz = 0
 radio.setGroup(1)
@@ -317,6 +321,21 @@ basic.forever(function () {
     }
 })
 basic.forever(function () {
+    if (Ausgewält == 3) {
+    	
+    }
+})
+basic.forever(function () {
+    if (Ausgewält == 4) {
+    	
+    }
+})
+basic.forever(function () {
+    if (Ausgewält == 5) {
+    	
+    }
+})
+basic.forever(function () {
     if (Ausgewält == 2) {
         let Items1 = 0
         if (Items1 == 0) {
@@ -338,26 +357,61 @@ basic.forever(function () {
                 Schutz = 1
             } else {
                 if (input.isGesture(Gesture.Shake)) {
+                    radio.sendNumber(13)
+                    Colldown()
+                }
+            }
+        }
+        if (Items1 == 3) {
+            radio.setTransmitPower(3)
+            basic.showLeds(`
+                . . . . #
+                . . . # .
+                # . # . .
+                . # . . .
+                # . # . .
+                `)
+            if (input.pinIsPressed(TouchPin.P0)) {
+                if (Warte == 1) {
+                    Vielleicht = randint(0, 1)
+                    Warte = 0
+                }
+                if (Vielleicht == 0) {
+                    Schutz = 1
+                }
+            } else {
+                if (input.isGesture(Gesture.Shake)) {
                     radio.sendNumber(12)
                     Colldown()
                 }
             }
         }
-    }
-})
-basic.forever(function () {
-    if (Ausgewält == 3) {
-    	
-    }
-})
-basic.forever(function () {
-    if (Ausgewält == 4) {
-    	
-    }
-})
-basic.forever(function () {
-    if (Ausgewält == 5) {
-    	
+        if (Items1 == 4) {
+            radio.setTransmitPower(7)
+            basic.showLeds(`
+                . . # # .
+                . # . # .
+                . # . # .
+                . # . # .
+                . . # # .
+                `)
+            if (input.pinIsPressed(TouchPin.P0)) {
+                if (Pfeile > 0) {
+                    basic.pause(100)
+                    if (input.pinIsPressed(TouchPin.P1)) {
+                        Pfeile += -1
+                        basic.showLeds(`
+                            . . # . .
+                            . # . # .
+                            # # # # #
+                            . # . # .
+                            . . # . .
+                            `)
+                        radio.sendNumber(11)
+                    }
+                }
+            }
+        }
     }
 })
 basic.forever(function () {
@@ -368,6 +422,12 @@ basic.forever(function () {
 basic.forever(function () {
     if (true) {
     	
+    }
+})
+basic.forever(function () {
+    if (Warte == 0) {
+        basic.pause(1000)
+        Warte = 1
     }
 })
 basic.forever(function () {
