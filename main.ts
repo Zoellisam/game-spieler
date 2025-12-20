@@ -12,6 +12,67 @@ radio.onReceivedNumber(function (receivedNumber) {
             Leben += -5
         }
     }
+    if (receivedNumber == 1) {
+        Coins += 1
+    }
+    if (receivedNumber == 2) {
+        Coins += -1
+    }
+    if (receivedNumber == 22) {
+        if (Items1 == 0) {
+            Items1 = 1
+        } else {
+            if (Items2 == 0) {
+                Items2 = 1
+            } else {
+                Items3 = 1
+            }
+        }
+    }
+    if (receivedNumber == 23) {
+        if (Items1 == 0) {
+            Items1 = 2
+        } else {
+            if (Items2 == 0) {
+                Items2 = 2
+            } else {
+                Items3 = 2
+            }
+        }
+    }
+    if (receivedNumber == 24) {
+        if (Items1 == 0) {
+            Items1 = 3
+        } else {
+            if (Items2 == 0) {
+                Items2 = 3
+            } else {
+                Items3 = 3
+            }
+        }
+    }
+    if (receivedNumber == 25) {
+        if (Items1 == 0) {
+            Items1 = 4
+        } else {
+            if (Items2 == 0) {
+                Items2 = 4
+            } else {
+                Items3 = 4
+            }
+        }
+    }
+    if (receivedNumber == 26) {
+        if (Items1 == 0) {
+            Items1 = 5
+        } else {
+            if (Items2 == 0) {
+                Items2 = 5
+            } else {
+                Items3 = 5
+            }
+        }
+    }
 })
 // Variable Items:
 // 0=nichts
@@ -55,12 +116,15 @@ let Pfeile = 0
 let Vielleicht = 0
 let Ausgewält = 0
 let Schutz = 0
+let Items3 = 0
+let Items2 = 0
+let Items1 = 0
 radio.setGroup(1)
 let Leben = 4
 let Coins = 10
-let Items1 = 0
-let Items2 = 0
-let Items3 = 0
+Items1 = 0
+Items2 = 0
+Items3 = 0
 basic.forever(function () {
     if (input.buttonIsPressed(Button.A)) {
         Ausgewält += -1
@@ -68,10 +132,131 @@ basic.forever(function () {
     if (input.buttonIsPressed(Button.B)) {
         Ausgewält += 1
     }
-})
-basic.forever(function () {
     if (!(input.pinIsPressed(TouchPin.P0))) {
         Schutz = 0
+    }
+})
+basic.forever(function () {
+    if (Ausgewält == 2 && Items1 == 0 || Ausgewält == 3 && Items2 == 0 || Ausgewält == 4 && Items3 == 0) {
+        basic.clearScreen()
+    }
+    if (Ausgewält == 2 && Items1 == 1 || Ausgewält == 3 && Items2 == 1 || Ausgewält == 4 && Items3 == 1) {
+        radio.setTransmitPower(3)
+        basic.showLeds(`
+            . . . # #
+            . . # # #
+            # # # # .
+            . # # . .
+            # . # . .
+            `)
+        if (input.pinIsPressed(TouchPin.P0)) {
+            Schutz = 1
+        } else {
+            if (input.isGesture(Gesture.Shake)) {
+                radio.sendNumber(13)
+                Colldown()
+            }
+        }
+    }
+    if (Ausgewält == 2 && Items1 == 2 || Ausgewält == 3 && Items2 == 2 || Ausgewält == 4 && Items3 == 2) {
+        radio.setTransmitPower(3)
+        basic.showLeds(`
+            . . . . #
+            . . . # .
+            # . # . .
+            . # . . .
+            # . # . .
+            `)
+        if (input.pinIsPressed(TouchPin.P0)) {
+            if (Vielleicht == 0) {
+                Schutz = 1
+            }
+        } else {
+            if (input.isGesture(Gesture.Shake)) {
+                radio.sendNumber(12)
+                Colldown()
+            }
+        }
+    }
+    if (Ausgewält == 2 && Items1 == 3 || Ausgewält == 3 && Items2 == 3 || Ausgewält == 4 && Items3 == 3) {
+        radio.setTransmitPower(7)
+        basic.showLeds(`
+            . . # # .
+            . # . # .
+            . # . # .
+            . # . # .
+            . . # # .
+            `)
+        if (input.pinIsPressed(TouchPin.P0)) {
+            if (0 < Pfeile) {
+                basic.pause(100)
+                while (input.pinIsPressed(TouchPin.P3)) {
+                    basic.showLeds(`
+                        . . # . .
+                        . # . # .
+                        # # # # #
+                        . # . # .
+                        . . # . .
+                        `)
+                }
+                Pfeile += -1
+                radio.sendNumber(12)
+                basic.pause(300)
+            }
+        }
+    }
+    if (Ausgewält == 2 && Items1 == 4 || Ausgewält == 3 && Items2 == 4 || Ausgewält == 4 && Items3 == 4) {
+        basic.showLeds(`
+            . . # . .
+            . # . . #
+            # # # # #
+            . # . . #
+            . . # . .
+            `)
+        basic.pause(2000)
+        basic.showNumber(Pfeile)
+    }
+    if (Ausgewält == 2 && Items1 == 5 || Ausgewält == 3 && Items2 == 5 || Ausgewält == 4 && Items3 == 5) {
+        radio.setTransmitPower(7)
+        basic.showLeds(`
+            . . . . .
+            . . # . .
+            # # # # .
+            . . # # .
+            . . . # .
+            `)
+        if (input.pinIsPressed(TouchPin.P0)) {
+            radio.sendNumber(12)
+            music.play(music.tonePlayable(294, music.beat(BeatFraction.Sixteenth)), music.PlaybackMode.InBackground)
+            basic.showLeds(`
+                . . . . .
+                . . . # .
+                . # # # #
+                . . . # #
+                . . . . #
+                `)
+            basic.pause(100)
+            basic.showLeds(`
+                . . . . .
+                . . # . .
+                # # # # .
+                . . # # .
+                . . . # .
+                `)
+            basic.pause(200)
+        }
+    }
+    if (Ausgewält == 2 && Items1 == 6 || Ausgewält == 3 && Items2 == 6 || Ausgewält == 4 && Items3 == 6) {
+        basic.showLeds(`
+            . . . # #
+            . . # . .
+            . # # # .
+            # # # # #
+            . # # # .
+            `)
+        if (input.pinIsPressed(TouchPin.P0)) {
+            Leben += 1
+        }
     }
 })
 basic.forever(function () {
@@ -172,129 +357,6 @@ basic.forever(function () {
         while (!(input.buttonIsPressed(Button.A))) {
             basic.showIcon(IconNames.Skull)
             music.playMelody("F F E E D D C C ", 170)
-        }
-    }
-})
-basic.forever(function () {
-    if (Ausgewält == 2 && Items1 == 0 || Ausgewält == 3 && Items2 == 0 || Ausgewält == 4 && Items3 == 0) {
-        basic.clearScreen()
-    }
-    if (Ausgewält == 2 && Items1 == 2 || Ausgewält == 3 && Items2 == 2 || Ausgewält == 4 && Items3 == 2) {
-        radio.setTransmitPower(3)
-        basic.showLeds(`
-            . . . # #
-            . . # # #
-            # # # # .
-            . # # . .
-            # . # . .
-            `)
-        if (input.pinIsPressed(TouchPin.P0)) {
-            Schutz = 1
-        } else {
-            if (input.isGesture(Gesture.Shake)) {
-                radio.sendNumber(13)
-                Colldown()
-            }
-        }
-    }
-    if (Ausgewält == 2 && Items1 == 3 || Ausgewält == 3 && Items2 == 3 || Ausgewält == 4 && Items3 == 3) {
-        radio.setTransmitPower(3)
-        basic.showLeds(`
-            . . . . #
-            . . . # .
-            # . # . .
-            . # . . .
-            # . # . .
-            `)
-        if (input.pinIsPressed(TouchPin.P0)) {
-            if (Vielleicht == 0) {
-                Schutz = 1
-            }
-        } else {
-            if (input.isGesture(Gesture.Shake)) {
-                radio.sendNumber(12)
-                Colldown()
-            }
-        }
-    }
-    if (Ausgewält == 2 && Items1 == 4 || Ausgewält == 3 && Items2 == 4 || Ausgewält == 4 && Items3 == 4) {
-        radio.setTransmitPower(7)
-        basic.showLeds(`
-            . . # # .
-            . # . # .
-            . # . # .
-            . # . # .
-            . . # # .
-            `)
-        if (input.pinIsPressed(TouchPin.P0)) {
-            if (0 < Pfeile) {
-                basic.pause(100)
-                while (input.pinIsPressed(TouchPin.P1)) {
-                    basic.showLeds(`
-                        . . # . .
-                        . # . # .
-                        # # # # #
-                        . # . # .
-                        . . # . .
-                        `)
-                }
-                Pfeile += -1
-                radio.sendNumber(12)
-                basic.pause(300)
-            }
-        }
-    }
-    if (Ausgewält == 2 && Items1 == 5 || Ausgewält == 3 && Items2 == 5 || Ausgewält == 4 && Items3 == 5) {
-        basic.showLeds(`
-            . . # . .
-            . # . . #
-            # # # # #
-            . # . . #
-            . . # . .
-            `)
-        basic.pause(2000)
-        basic.showNumber(Pfeile)
-    }
-    if (Ausgewält == 2 && Items1 == 6 || Ausgewält == 3 && Items2 == 6 || Ausgewält == 4 && Items3 == 6) {
-        radio.setTransmitPower(7)
-        basic.showLeds(`
-            . . . . .
-            . . # . .
-            # # # # .
-            . . # # .
-            . . . # .
-            `)
-        if (input.pinIsPressed(TouchPin.P0)) {
-            radio.sendNumber(12)
-            music.play(music.tonePlayable(294, music.beat(BeatFraction.Sixteenth)), music.PlaybackMode.InBackground)
-            basic.showLeds(`
-                . . . . .
-                . . . # .
-                . # # # #
-                . . . # #
-                . . . . #
-                `)
-            basic.pause(100)
-            basic.showLeds(`
-                . . . . .
-                . . # . .
-                # # # # .
-                . . # # .
-                . . . # .
-                `)
-            basic.pause(200)
-        }
-    }
-    if (Ausgewält == 2 && Items1 == 7 || Ausgewält == 3 && Items2 == 7 || Ausgewält == 4 && Items3 == 7) {
-        basic.showLeds(`
-            . . . # #
-            . . # . .
-            . # # # .
-            # # # # #
-            . # # # .
-            `)
-        if (input.pinIsPressed(TouchPin.P0)) {
-            Leben += 1
         }
     }
 })
